@@ -13,21 +13,36 @@ function returnnouveauticket() {
     return nouveaubakclog;
 }
 
-let arrayticket = [];
+function getTicketsFromLocalStorage() {
+    const tickets = localStorage.getItem("backlog");
+    return tickets ? JSON.parse(tickets) : [];
+}
+
+function saveTicketsToLocalStorage(tickets) {
+    localStorage.setItem("backlog", JSON.stringify(tickets));
+}
+
+
+
+let arrayticket = getTicketsFromLocalStorage();
 
 function modalticket() {
     const ajouternouveaubakcklog = returngetelementbyidinput().value.trim();
-    
+
     if (ajouternouveaubakcklog !== '') {
         arrayticket.unshift(ajouternouveaubakcklog); 
+        saveTicketsToLocalStorage(arrayticket);
         console.log(arrayticket);
-        returngetelementbyidinput().value = ''; 
+        returngetelementbyidinput().value = '';
     }
 }
 
 function afficherTickets() {
     const backlog = returnnouveauticket();   
-        backlog.innerHTML += `<div class ="nouveau-tache">${arrayticket[0]}</div>`;
+    backlog.innerHTML = ''; 
+    arrayticket.forEach(ticket => {
+        backlog.innerHTML += `<div class="nouveau-tache">${ticket}</div>`; 
+    });
 }
 
 function ajouterticket() {
@@ -36,4 +51,8 @@ function ajouterticket() {
         afficherTickets();  
     });
 }
-ajouterticket();
+
+ajouterticket(); 
+afficherTickets(); 
+
+
